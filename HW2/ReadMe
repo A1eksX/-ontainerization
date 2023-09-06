@@ -1,0 +1,25 @@
+1.	Дадим пользователю привилегии суперпользователя sudo -s 
+2.	Обновим информацию о пакетах в системе sudo apt update 
+3.	Установим пакеты, необходимые для установки lxc
+3.1	 apt-get install lxc debootstrap bridge-utils lxc-templates 
+3.2	apt-get install lxd-installer
+3.3	lxd init  (Здесь просто нажимаем на Enter что установились значения по умолчанию)
+3.4	Проверяем что установилось  lxc storage list
+4.	Создаём контейнер  lxc-create -n test1234 -t ubuntu 
+5.	Запускаем установленный контейнер    lxc-start -n test1234  
+6.	Заходим в контейнер  lxc-attach -n test1234  
+7.	Проверяем память  free -m  
+8.	Чтобы ограничить объём доступной памяти выходим из контейнера  exit
+9.	Закрываем его   lxc-stop -n test1234  
+10.	Открываем редактор Nano для редактирования файла конфигурации nano /var/lib/lxc/test1234/config
+11.	В # Container specific configuration прописываем lxc.cgroup2.memory.max = 256M  для ограничения используемой памяти.
+12.	Запускаем установленный контейнер    lxc-start -n test1234  
+13.	Заходим в контейнер  lxc-attach -n test1234  
+
+Для автоматического запуска контейнера необходимо:
+1.	Открываем редактор Nano для редактирования файла конфигурации nano /var/lib/lxc/test1234/config
+2.	В # Container specific configuration прописываем lxc.start.auto = 1
+3.	Остановим контейнер lxc-stop -n test1234
+4.	Проверим  lxc-ls -f 
+5.	Перезагрузим систему reboot  
+6.	Проверим  sudo lxc-ls -f 
